@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     struct Flags flags = { .encrypt = "-e", .decrypt = "-d" };
 
     char* buff = NULL;
-    short shift = atoi(argv[2]);
+    short shift = abs(atoi(argv[2]));
     const short characters_size = 26;
     
     if (argc != 4) {
@@ -26,9 +26,6 @@ int main(int argc, char* argv[]) {
         printf("[!] Invalid flag: Should either be -e or -d.\n");
         return 1;
     }
-
-    if (shift < 1)
-        shift *= -1;
 
     buff = (char*) calloc(strlen(argv[3]) + 1, sizeof(char));
     process_text(buff, argv[3], shift, characters_size, &flags, argv[1]);
