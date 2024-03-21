@@ -28,6 +28,12 @@ int main(int argc, char* argv[]) {
     }
 
     buff = (char*) calloc(strlen(argv[3]) + 1, sizeof(char));
+
+    if (buff == NULL) {
+        printf("[-] Fatal error: Could not allocate memory. Exiting program.\n");
+        return 1;
+    }
+
     process_text(buff, argv[3], shift, characters_size, &flags, argv[1]);
 
     printf("\nInput: %s\n", argv[3]);
