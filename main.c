@@ -62,6 +62,8 @@ void process_text(char* buff, char* text, const short shift, const short size, s
             *buff++ = current_char;
         } else if (isspace(*p_start)) {
             *buff++ = '\x20';
+        } else {
+            *buff++ = *p_start;
         }
 
         p_start++;
