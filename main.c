@@ -3,16 +3,12 @@
 #include <string.h>
 #include <ctype.h>
 
-struct Flags {
-    const char encrypt[3];
-    const char decrypt[3];
-};
+#define E_FLAG "-e"
+#define D_FLAG "-d"
 
-void process_text(char* buff, char* text, const short shift, const short size, struct Flags* flags, char* selected_flag);
+void process_text(char* buff, char* text, const short shift, const short size, char* selected_flag);
 
 int main(int argc, char* argv[]) {
-    struct Flags flags = { .encrypt = "-e", .decrypt = "-d" };
-
     char* buff = NULL;
     short shift = abs(atoi(argv[2]));
     const short characters_size = 26;
@@ -22,7 +18,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if (strncmp(argv[1], flags.encrypt, 3) && strncmp(argv[1], flags.decrypt, 3)) {
+    if (strncmp(argv[1], E_FLAG, 3) && strncmp(argv[1], D_FLAG, 3)) {
         printf("[!] Invalid flag: Should either be -e or -d.\n");
         return 1;
     }
@@ -34,7 +30,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    process_text(buff, argv[3], shift, characters_size, &flags, argv[1]);
+    process_text(buff, argv[3], shift, characters_size, argv[1]);
 
     printf("\nInput: %s\n", argv[3]);
     printf("Output: %s\n\n", buff);
@@ -43,7 +39,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void process_text(char* buff, char* text, const short shift, const short size, struct Flags* flags, char* selected_flag) {
+void process_text(char* buff, char* text, const short shift, const short size, char* selected_flag) {
     char* p_start = text;
     char current_char;
     char base;
@@ -52,12 +48,10 @@ void process_text(char* buff, char* text, const short shift, const short size, s
         if (isalpha(*p_start)) {
             base = isupper(*p_start) ? 'A' : 'a';
 
-            if (strncmp(selected_flag, flags->encrypt, 3) == 0)
+            if (strncmp(selected_flag, E_FLAG, 3) == 0)
                 current_char = ((*p_start - base) + shift) % size + base;
-            else if (strncmp(selected_flag, flags->decrypt, 3) == 0)
+            else if (strncmp(selected_flag, D_FLAG, 3) == 0)
                 current_char = (*p_start -  base - shift + size) % size + base;
-            else
-                return;
 
             *buff++ = current_char;
         } else if (isspace(*p_start)) {
